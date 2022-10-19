@@ -14,3 +14,7 @@
     * can also plot time data, but only if the other two have already been invesitgated
     * Consider using reciprocal time plots to increase dynamic range
 
+## Notes on MPI
+* Synchronous send does not block computation unless message exceeds the size of the send buffer. If the message size is below the buffersize then it will only block further computation untill the message has been copied onto the buffer.
+* Think about granulairty, too large => synchonisation overhead, too small => communication overhead
+

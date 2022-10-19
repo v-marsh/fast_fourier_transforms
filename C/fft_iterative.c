@@ -5,15 +5,14 @@
 struct rootsofunity *_getrootsofunity(int nth_root, int maxpower)
 {
     // Total number of powers to calculate (including 0)
-    int n = maxpower + 1;
     struct rootsofunity *roots = (struct rootsofunity*)malloc(sizeof(struct rootsofunity));
-    roots->re = malloc(n * sizeof(double));
-    roots->im = malloc(n * sizeof(double));
+    roots->re = (double*)malloc(maxpower * sizeof(double));
+    roots->im = (double*)malloc(maxpower * sizeof(double));
     // Determine real and imaginary roots of unity
     double arg;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < maxpower; i++){
         arg = 2 * PI_VALUE * i / nth_root;
-        roots->im[i] = -sin(arg);
+        roots->im[i] = sin(-arg);
         roots->re[i] = cos(arg);
     }
     return roots;

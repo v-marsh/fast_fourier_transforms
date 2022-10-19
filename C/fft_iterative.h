@@ -24,7 +24,7 @@ void fft_iterative_compute_ordered(double **arr, int len);
  * @brief Compute the first n powers for of a root of unity from 0 to n 
  * 
  * @param n_root the root of unity
- * @param maxpower the maximum (includsive) power
+ * @param maxpower the maximum (non inclusive) power
  * @return double** (2, maxpower) real and complex values for the first
  * maxpower powers for the n_root root of unity. NOTE: remember to 
  * release memory after use

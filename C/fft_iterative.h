@@ -36,4 +36,4 @@ struct rootsofunity *_getrootsofunity(int n_root, int maxpower);
  * 
  * @param roots object to be destoyed
  */
-void freerootsofunity(struct rootsofunity *roots);
+void freerootsofunity(struct rootsofunity **roots);

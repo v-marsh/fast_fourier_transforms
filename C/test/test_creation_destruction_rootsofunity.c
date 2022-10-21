@@ -2,9 +2,9 @@
 
 int main(int argc, char **argv)
 {
-    /* Check that _getrootsofunity returns a roots of unity object with
+    /* Check that _getcomplexarr returns a roots of unity object with
     the correct values for the two powers of the first root of unity */
-    struct rootsofunity *roots = _getrootsofunity(2, 2);
+    struct complexarr *roots = _getrootsofunity(2, 2);
     double re_true[] = {1, -1};
     double im_true[] = {-0, -0};
     double epsilon = 1e-8;
@@ -15,9 +15,9 @@ int main(int argc, char **argv)
         if (re_diff > epsilon || -re_diff > epsilon) return -1;
         if (im_diff > epsilon || -im_diff > epsilon) return -1;
     }
-    /* Check that freerootsofunity frees all memeory allocated by
+    /* Check that _freerootsofunity frees all memeory allocated by
     _getrootsofunity and set all previously allocated pointers to NULL*/
-    freerootsofunity(&roots);
+    _freerootsofunity(&roots);
     if (roots != NULL) return -1;
     return 0;
 }

@@ -80,11 +80,13 @@ def iterative_fft2(array):
     return array
 
 if __name__ == "__main__":
-    x_vals = np.linspace(0, np.pi * 2, 128, dtype="complex128")
-    y_vals = np.sin(x_vals)
-    fft_true = fft(y_vals)
-    fft_iterative = iterative_fft2(y_vals)
+    x_simple = np.linspace(0, 15, 16, dtype="complex128")
+    fft_true = fft(x_simple)
+    fft_iterative = iterative_fft2(x_simple)
     if np.allclose(fft_true, fft_iterative, 1e-5):
         print("success")
     else:
         print("fail")
+    
+    for i in range(fft_true.__len__()):
+        print(f"{np.real(fft_true[i])}, ", end="")

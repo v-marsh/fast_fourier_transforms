@@ -1,50 +1,6 @@
 #include "fft_iterative.h"
 
 
-struct complexarr *alloccomplexarr(int n_elements)
-{
-    struct complexarr *roots = (struct complexarr*)malloc(sizeof(struct complexarr));
-    roots->len = n_elements;
-    roots->re = (double*)calloc(n_elements, sizeof(double));
-    roots->im = (double*)calloc(n_elements, sizeof(double));
-    return roots;
-}
-
-
-void freecomplexarr(struct complexarr **roots)
-{
-    // Free allocated memory and set hanging pointers to NULL
-    free((*roots)->im);
-    (*roots)->im = NULL;
-    free((*roots)->re);
-    (*roots)->re = NULL;
-    free(*roots);
-    *roots = NULL;
-}
-
-
-struct complexarr *_getrootsofunity(int nth_root, int maxpower)
-{
-    // Total number of powers to calculate (including 0)
-    struct complexarr *roots = alloccomplexarr(maxpower);
-    // Determine real and imaginary roots of unity
-    double arg;
-    for (int i = 0; i < maxpower; i++){
-        arg = 2 * M_PI * i / nth_root;
-        roots->im[i] = sin(-arg);
-        roots->re[i] = cos(arg);
-    }
-    return roots;
-}
-
-
-void _freerootsofunity(struct complexarr **roots)
-{
-    freecomplexarr(roots);
-}
-
-
-
 void gentleman_sande_butterfly(struct complexarr *arr, struct complexarr *roots,
     int subprobsize, int n_subproblems)
 {
@@ -53,23 +9,22 @@ void gentleman_sande_butterfly(struct complexarr *arr, struct complexarr *roots,
         int start = k * subprobsize;
         int end = start + halfsize;
         int root_pow = 0;
-        struct complexarr *temp = alloccomplexarr(2);
+        struct complexarr *temp = alloccomplexarr(1);
+        int ioff;
         // NOTE: THE PROBLEM IS WITH THE COMPLEX MULTIPLICATION IN SECOND HALF
         for (int i = start; i < end; i++){
-            temp->re[0] = arr->re[i];
-            temp->re[1] = arr->re[i + halfsize];
-            temp->im[0] = arr->im[i];
-            temp->im[1] = arr->im[i + halfsize];
-            arr->re[i] = temp->re[0] + temp->re[1];
-            arr->im[i] = temp->im[0] + temp->im[1];
-            arr->re[i + halfsize] = (temp->re[0] - temp->re[1]) * roots->re[root_pow];
-            arr->re[i + halfsize] -= (temp->im[0] - temp->im[1]) * roots->im[root_pow];
-            arr->im[i + halfsize] = (temp->re[0] - temp->re[1]) * roots->im[root_pow];
-            arr->im[i + halfsize] += (temp->im[0] - temp->im[1]) * roots->re[root_pow];
+            ioff = i + halfsize;
+            temp->re[0] = arr->re[i] - arr->re[ioff];
+            temp->im[0] = arr->im[i] - arr->im[ioff];
+            arr->re[i] += arr->re[ioff];
+            arr->im[i] += arr->im[ioff];
+            arr->re[ioff] = temp->re[0] * roots->re[root_pow] - temp->im[0] * roots->im[root_pow];
+            arr->im[ioff] = temp->re[0] * roots->im[root_pow] + temp->im[0] * roots->re[root_pow];
             root_pow += n_subproblems;            
         } 
     }
 }
+
 
 void fft_iterative_ordered(struct complexarr **arr)
 {
@@ -80,7 +35,7 @@ void fft_iterative_ordered(struct complexarr **arr)
     double epsilon = 1e-8;
     if (comparedouble(pow_of_2, pow_of_2_int, epsilon) == false)
     {
-        fprintf(stderr, "Error: input array length much be equal to 2^n\n");
+        perror("Error: input array length much be equal to 2^n");
         exit(EXIT_FAILURE);
     }
     // Create lookup table for roots of unity

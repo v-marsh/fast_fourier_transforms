@@ -32,11 +32,17 @@
      */
     unsigned int bitreverse(unsigned int val, unsigned int count);
 
+    struct complexnum
+    {
+        double re;
+        double im;
+    };
+
+    
     struct complexarr
     {
         unsigned int len;
-        double *re;
-        double *im;
+        struct complexnum *val;
     };
 
 

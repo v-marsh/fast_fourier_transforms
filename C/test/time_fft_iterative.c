@@ -10,7 +10,7 @@ int main(int argc, char **argv)
     double step = 2 * M_PI / elements;
     for (int i = 0; i < elements; i++)
     {
-        array->re[i] = sin(step * i);
+        array->val[i].re = sin(step * i);
     }
     fft_iterative_ordered(&array);
     return 0;

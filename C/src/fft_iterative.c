@@ -9,17 +9,17 @@ void gentleman_sande_butterfly(struct complexarr *arr, struct complexarr *roots,
         int start = k * subprobsize;
         int end = start + halfsize;
         int root_pow = 0;
-        struct complexarr *temp = alloccomplexarr(1);
+        struct complexnum temp;
         int ioff;
         // NOTE: THE PROBLEM IS WITH THE COMPLEX MULTIPLICATION IN SECOND HALF
         for (int i = start; i < end; i++){
             ioff = i + halfsize;
-            temp->re[0] = arr->re[i] - arr->re[ioff];
-            temp->im[0] = arr->im[i] - arr->im[ioff];
-            arr->re[i] += arr->re[ioff];
-            arr->im[i] += arr->im[ioff];
-            arr->re[ioff] = temp->re[0] * roots->re[root_pow] - temp->im[0] * roots->im[root_pow];
-            arr->im[ioff] = temp->re[0] * roots->im[root_pow] + temp->im[0] * roots->re[root_pow];
+            temp.re = arr->val[i].re - arr->val[ioff].re;
+            temp.im = arr->val[i].im - arr->val[ioff].im;
+            arr->val[i].re += arr->val[ioff].re;
+            arr->val[i].im += arr->val[ioff].im;
+            arr->val[ioff].re = temp.re * roots->val[root_pow].re - temp.im * roots->val[root_pow].im;
+            arr->val[ioff].im = temp.re * roots->val[root_pow].im + temp.im * roots->val[root_pow].re;
             root_pow += n_subproblems;            
         } 
     }
@@ -53,15 +53,14 @@ void fft_iterative_ordered(struct complexarr **arr)
         halfsize = (int) subprobsize / 2;
         n_subproblems *= 2;
     }
-    struct complexarr *temparr = alloccomplexarr((*arr)->len);
+    struct complexarr *newarr = alloccomplexarr((*arr)->len);
     unsigned int nbits = pow_of_2_int;
     for (unsigned int i = 0; i < (*arr)->len; i++){
-        temparr->re[bitreverse(i, nbits)] = (*arr)->re[i];
-        temparr->im[bitreverse(i, nbits)] = (*arr)->im[i];
+        newarr->val[bitreverse(i, nbits)].re = (*arr)->val[i].re;
+        newarr->val[bitreverse(i, nbits)].im = (*arr)->val[i].im;
     }
-    for (unsigned int i = 0; i < (*arr)->len; i++){
-        (*arr)->re[i] = temparr->re[i];
-        (*arr)->im[i] = temparr->im[i];
-    }
-    _freerootsofunity(&temparr);
+    struct complexarr *arrtmp = *arr;
+    *arr = newarr;
+    newarr = NULL;
+    _freerootsofunity(&arrtmp);
 }

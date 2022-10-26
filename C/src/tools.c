@@ -30,8 +30,7 @@ struct complexarr *alloccomplexarr(int n_elements)
 {
     struct complexarr *roots = (struct complexarr*)malloc(sizeof(struct complexarr));
     roots->len = n_elements;
-    roots->re = (double*)calloc(n_elements, sizeof(double));
-    roots->im = (double*)calloc(n_elements, sizeof(double));
+    roots->val = (struct complexnum*)calloc(n_elements, sizeof(struct complexnum));
     return roots;
 }
 
@@ -39,10 +38,8 @@ struct complexarr *alloccomplexarr(int n_elements)
 void freecomplexarr(struct complexarr **roots)
 {
     // Free allocated memory and set hanging pointers to NULL
-    free((*roots)->im);
-    (*roots)->im = NULL;
-    free((*roots)->re);
-    (*roots)->re = NULL;
+    free((*roots)->val);
+    (*roots)->val = NULL;
     free(*roots);
     *roots = NULL;
 }
@@ -56,8 +53,8 @@ struct complexarr *_getrootsofunity(int nth_root, int maxpower)
     double arg;
     for (int i = 0; i < maxpower; i++){
         arg = 2 * M_PI * i / nth_root;
-        roots->im[i] = sin(-arg);
-        roots->re[i] = cos(arg);
+        roots->val[i].im = -sin(arg);
+        roots->val[i].re = cos(arg);
     }
     return roots;
 }

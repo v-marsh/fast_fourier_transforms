@@ -29,5 +29,10 @@ target_link_libraries(fft_threaded
     tools
     OpenMP::OpenMP_C)
 
+add_library(avxtools
+    ${SRC}/avxtools.c
+    ${SRC}/avxtools.h)
+target_compile_options(avxtools PRIVATE "-mavx2")
+
     enable_testing()
 add_subdirectory(test)

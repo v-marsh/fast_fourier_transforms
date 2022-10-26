@@ -33,8 +33,8 @@ void fft_threaded(struct complexarr **arr)
     {
         #pragma omp for schedule(auto)
         for (i = 0; i < (*arr)->len; i++){
-            newarr->re[bitreverse(i, pow_of_2)] = (*arr)->re[i];
-            newarr->im[bitreverse(i, pow_of_2)] = (*arr)->im[i];
+            newarr->val[bitreverse(i, pow_of_2)].re = (*arr)->val[i].re;
+            newarr->val[bitreverse(i, pow_of_2)].im = (*arr)->val[i].im;
         }
     }
     struct complexarr *arrtmp = *arr;
@@ -59,12 +59,12 @@ void gentleman_sande_butterfly_threaded(struct complexarr *arr,
                     id = start + j;
                     id2 = id + halfsize;
                     root_pow = j * n_subproblems;
-                    tempre = arr->re[id] - arr->re[id2];
-                    tempim = arr->im[id] - arr->im[id2];
-                    arr->re[id] += arr->re[id2];
-                    arr->im[id] += arr->im[id2];
-                    arr->re[id2] = tempre * roots->re[root_pow] - tempim * roots->im[root_pow];
-                    arr->im[id2] = tempre * roots->im[root_pow] + tempim * roots->re[root_pow];
+                    tempre = arr->val[id].re - arr->val[id2].re;
+                    tempim = arr->val[id].im - arr->val[id2].im;
+                    arr->val[id].re += arr->val[id2].re;
+                    arr->val[id].im += arr->val[id2].im;
+                    arr->val[id2].re = tempre * roots->val[root_pow].re - tempim * roots->val[root_pow].im;
+                    arr->val[id2].im = tempre * roots->val[root_pow].im + tempim * roots->val[root_pow].re;
                 } 
             }
         }

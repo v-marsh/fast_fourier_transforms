@@ -7,6 +7,7 @@
     
     #define MAXUINT 4294967295
     #define UINTBITS 32
+    #define BITSPERBYTE 4
 
     /**
      * @brief compares two double to determine if they are within epsilon of
@@ -82,5 +83,31 @@
      * @param roots roots to be freed
      */
     void _freerootsofunity(struct complexarr **roots);
+
+
+    /**
+     * @brief Check if input value is a power of two up to a given 
+     * epsilon.
+     * 
+     * @param value the number to check
+     * @param epsilon the maxium allowed deviation from a power of two
+     * @return unsigned int log2 of input if within epsilon of a power 
+     * of two, otherwise -1.
+     */
+    int check_pow_of_2(unsigned int value, double epsilon);
+
+
+    /**
+     * @brief Determine the number that differs from value only on the 
+     * bitnum^th bit.
+     * 
+     * @param value number to determine compliment for
+     * @param bitnum index that compliment should differ on (0 inclusive)
+     * @param maxbits number of bits used to represent value
+     * @return unsigned int the compliment of value that differs on the
+     * bitnum^th bit.
+     */
+    unsigned int find_complement(unsigned int value, unsigned int bitnum, unsigned int maxbits);
+
 
 #endif

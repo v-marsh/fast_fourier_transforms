@@ -20,7 +20,7 @@ target_link_libraries(fft_iterative
     m
     tools)
 
-add_library(fft_threaded
+add_library(fft_threaded SHARED
     ${SRC}/fft_threaded.c
     ${SRC}/fft_threaded.h
     ${SRC}/tools.h)
@@ -29,10 +29,26 @@ target_link_libraries(fft_threaded
     tools
     OpenMP::OpenMP_C)
 
-add_library(avxtools
+add_library(avxtools SHARED
     ${SRC}/avxtools.c
     ${SRC}/avxtools.h)
 target_compile_options(avxtools PRIVATE "-mavx2")
+
+add_library(mpi_tools SHARED
+    ${SRC}/mpi_tools.c
+    ${SRC}/mpi_tools.h)
+target_link_libraries(mpi_tools
+    MPI::MPI_C
+)
+
+add_library(fft_distributed
+    ${SRC}/fft_distributed.c
+    ${SRC}/fft_distributed.h
+    ${SRC}/mpi_tools.h)
+target_link_libraries(fft_distributed
+    MPI::MPI_C
+    fft_iterative
+    mpi_tools)
 
     enable_testing()
 add_subdirectory(test)

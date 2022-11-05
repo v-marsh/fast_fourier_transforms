@@ -77,15 +77,15 @@ int check_pow_of_2(unsigned int value, double epsilon)
 }
 
 
-    unsigned int find_complement(unsigned int value, unsigned int bitnum, unsigned int maxbits)
-    {
-        unsigned int out, mask, bits_in_value, bits_to_shift;
-        bits_in_value = sizeof(value) * BITSPERBYTE;
-        bits_to_shift = bits_in_value - maxbits;
-        mask = pow(2, bitnum + 1);
-        mask <<= bits_to_shift;
-        value <<= bits_to_shift;
-        out = value & mask;
-        out >>= bits_to_shift;
-        return out;
-    }
+unsigned int get_complement(unsigned int value, unsigned int bitnum, unsigned int maxbits)
+{
+    unsigned int out, mask, bits_in_value, bits_to_shift;
+    bits_in_value = sizeof(value) * BITSPERBYTE;
+    bits_to_shift = bits_in_value - maxbits;
+    mask = pow(2, bitnum + 1);
+    mask <<= bits_to_shift;
+    value <<= bits_to_shift;
+    out = value & mask;
+    out >>= bits_to_shift;
+    return out;
+}

@@ -10,4 +10,7 @@ $ F_n = \sum_{k = 0}^{N-1} f_k e^{-2 \pi i n k / N} $
     * Can still use for general sequences with some slowdown by padding it until it becomes a power of two
 * The algorithm makes use of the fact that the exponential is symmetric around $ N/2 $:
 $e^{\frac{- j2\pi k m}{N/2}} = e^{\frac{- j2\pi (N/2 + k) m}{N/2}}$
-    * 
+
+## Notes on implementations
+* Distributed
+    * Only allows the number of processes to be a power of two as this ensures that a processor will either have all or half of the data required to perform one gentleman sande butterfly operation

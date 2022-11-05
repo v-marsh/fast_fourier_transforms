@@ -107,7 +107,7 @@
      * @return unsigned int the compliment of value that differs on the
      * bitnum^th bit.
      */
-    unsigned int find_complement(unsigned int value, unsigned int bitnum, unsigned int maxbits);
+    unsigned int get_complement(unsigned int value, unsigned int bitnum, unsigned int maxbits);
 
 
 #endif
